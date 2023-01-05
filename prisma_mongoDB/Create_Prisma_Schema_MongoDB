@@ -1,0 +1,268 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String?
+  userName String @unique
+  password String
+  email String @unique
+  group_id Int?
+  label_id Int?
+  active_status Int @default(1)
+  createdAt DateTime @default(now())
+  createdBy Int?
+  updatedAt DateTime?
+  updatedBy Int?
+}
+
+model Departments {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  departmentName String
+  descriptoin String?
+  active_status Int @default(1)
+  createdAt DateTime @default(now())
+  createdBy Int?
+  updatedAt DateTime?
+  updatedBy Int?
+}
+
+model Subjects {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+   shortName String?
+  subjectName String
+  descriptoin String? 
+  active_status Int @default(1)
+  
+  createdAt DateTime @default(now())
+  createdBy Int?
+  updatedAt DateTime?
+  updatedBy Int?
+  studentAttendance StudentAttendance[]
+}
+
+model Sessions {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  sessionName String
+  descriptoin String?
+  active_status Int @default(1)
+  createdAt DateTime @default(now())
+  createdBy Int?
+  updatedAt DateTime?
+  updatedBy Int?
+  studentsAdmissionNew StudentsAdmissionNew[]
+  studentsAdmissionOld StudentsAdmissionOld[]
+  batchsMaps BatchsMaps[]
+  
+}
+
+model Gender {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  genderName String
+  descriptoin String?
+  active_status Int @default(1)
+  createdAt DateTime @default(now())
+  createdBy Int?
+  updatedAt DateTime?
+  updatedBy Int?
+  studentsAdmissionNew StudentsAdmissionNew[]
+  studentsAdmissionOld StudentsAdmissionOld[]
+}
+
+model Courses {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  courseName String
+  shortName String?
+  descriptoin String?
+  active_status Int @default(1)
+  createdAt DateTime @default(now())
+  createdBy Int?
+  updatedAt DateTime?
+  updatedBy Int?
+  studentAttendance StudentAttendance[]
+  studentsAdmissionNew StudentsAdmissionNew[]
+  studentsAdmissionOld StudentsAdmissionOld[]
+  batchsMaps BatchsMaps[]
+}
+
+
+model Phases {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  phaseName String
+  descriptoin String?
+  active_status Int @default(1)
+  createdAt DateTime @default(now())
+  createdBy Int?
+  updatedAt DateTime?
+  updatedBy Int?
+  studentsAdmissionNew StudentsAdmissionNew[]
+  studentsAdmissionOld StudentsAdmissionOld[]
+}
+
+
+model ClassTypes {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  ClassTypesName String
+  shortName String?
+  descriptoin String?
+  active_status Int @default(1)
+  createdAt DateTime @default(now())
+  createdBy Int?
+  updatedAt DateTime?
+  updatedBy Int?
+}
+
+
+model ClassRooms {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  classRoomsName String
+  shortName String?
+  descriptoin String?
+  active_status Int @default(1)
+  createdAt DateTime @default(now())
+  createdBy Int?
+  updatedAt DateTime?
+  updatedBy Int?
+}
+
+model YearName {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  yearName String
+  descriptoin String?
+  active_status Int @default(1)
+  createdAt DateTime @default(now())
+  createdBy Int?
+  updatedAt DateTime?
+  updatedBy Int?
+}
+
+
+model Batchs {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  batchName String
+  shortName String?
+  descriptoin String?
+  active_status Int @default(1)
+  createdAt DateTime @default(now())
+  createdBy Int?
+  updatedAt DateTime?
+  updatedBy Int?
+  studentsAdmissionNew StudentsAdmissionNew[]
+  studentsAdmissionOld StudentsAdmissionOld[]
+  batchsMaps BatchsMaps[]
+}
+
+
+model BatchsMaps {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  descriptoin String?
+  active_status Int @default(1)
+  createdAt DateTime @default(now())
+  createdBy Int?
+  updatedAt DateTime?
+  updatedBy Int?
+  courses Courses? @relation(fields: [courseId], references: [id])
+  courseId String @db.ObjectId
+  sessions Sessions? @relation(fields: [sessionId], references: [id])
+  sessionId String
+  batchs Batchs? @relation(fields: [batchId], references: [id])
+  batchId String
+}
+
+model PartNames {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  partName String
+  descriptoin String?
+  active_status Int @default(1)
+  createdAt DateTime @default(now())
+  createdBy Int?
+  updatedAt DateTime?
+  updatedBy Int?
+}
+
+
+model StudentsAdmissionNew{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  moneyReceiptNo String?
+  fullName String?
+  descripton String?
+  mobileNumber String?
+  admissionDate DateTime?
+  dateOfBirth DateTime?
+  active_status Int @default(1)
+  createdAt DateTime @default(now())
+  createdBy Int?
+  updatedAt DateTime?
+  updatedBy Int?
+  courses Courses? @relation(fields: [courseId], references: [id])
+  courseId String? @db.ObjectId
+  batchs Batchs? @relation(fields: [batchId], references: [id])
+  batchId String? @db.ObjectId
+  phases Phases ? @relation(fields: [phaseId], references: [id])
+  phaseId String @db.ObjectId
+  sessions Sessions? @relation(fields: [sessionId], references: [id])
+  sessionId String @db.ObjectId
+  gender Gender? @relation(fields: [genderId], references: [id])
+  genderId String @db.ObjectId
+}
+
+
+model StudentsAdmissionOld{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  moneyReceiptNo String?
+  fullName String?
+  descripton String?
+  mobileNumber String?
+  admissionDate DateTime?
+  dateOfBirth DateTime?
+  active_status Int @default(1)
+  createdAt DateTime @default(now())
+  createdBy Int?
+  updatedAt DateTime?
+  updatedBy Int?
+  courses Courses? @relation(fields: [courseId], references: [id])
+  courseId String? @db.ObjectId
+  batchs Batchs? @relation(fields: [batchId], references: [id])
+  batchId String? @db.ObjectId
+  phases Phases ? @relation(fields: [phaseId], references: [id])
+  phaseId String @db.ObjectId
+  sessions Sessions? @relation(fields: [sessionId], references: [id])
+  sessionId String @db.ObjectId
+  gender Gender? @relation(fields: [genderId], references: [id])
+  genderId String @db.ObjectId
+}
+
+
+model StudentAttendance{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String?
+  classTypeId String?
+  genderId String?
+  studentId String?
+  sessionId String?
+  batchId String?
+  classRoomId String?
+  groupId String?
+  inTime String?
+  qrCodeGen String?
+  active_status Int @default(1)
+  createdAt DateTime @default(now())
+  createdBy Int?
+  updatedAt DateTime?
+  updatedBy Int?
+  courses Courses? @relation(fields: [courseId], references: [id])
+  courseId String? @db.ObjectId
+  subjects Subjects? @relation(fields: [subjectId], references: [id])
+  subjectId String? @db.ObjectId
+}
+
+model Testa {
+   id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  userName  Int  
+}
